@@ -4,8 +4,8 @@
 	/* Colors */
 	--color-black: #000;
 	--color-black-100: #000319;
-	--color-black-200: rgba(17, 25, 40, 0.75);
-	--color-black-300: rgba(255, 255, 255, 0.125);
+	--color-dark-blue-alpha: rgba(17, 25, 40, 0.75);
+	--color-overlay-light: rgba(255, 255, 255, 0.125);
 
 	--color-white: #fff;
 	--color-white-100: #bec1dd;

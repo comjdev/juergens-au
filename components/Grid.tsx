@@ -3,6 +3,10 @@ import { BentoGrid, BentoGridItem } from "./ui/BentoGrid";
 import { gridItems } from "@/data";
 
 const Grid = () => {
+	if (!gridItems?.length) {
+		return null;
+	}
+
 	return (
 		<section id="about">
 			<BentoGrid>

@@ -1,6 +1,7 @@
 "use client";
 
 import { FaLocationArrow } from "react-icons/fa6";
+import Image from "next/image";
 
 import { projects } from "@/data";
 import { PinContainer } from "./ui/PinContainer";
@@ -18,15 +19,29 @@ const RecentProjects = () => {
 						key={id}
 						className="sm:h-164 h-128 lg:min-h-130 sm:w-[570px] flex items-center justify-center w-[80vw]"
 					>
-						<PinContainer title={link} href={link}>
+						<PinContainer title={title} href={link}>
 							<div className="relative flex items-center justify-center sm:w-[570px] w-[80vw] overflow-hidden sm:h-[40vh] h-[30vh] mb-10">
 								<div
 									className="relative w-full h-full overflow-hidden lg:rounded-3xl"
 									style={{ backgroundColor: "#13162D" }}
 								>
-									<img src="/bg.png" alt="bgimg" />
+									<Image 
+										src="/bg.png" 
+										alt={`${title} background`}
+										fill
+										className="object-cover"
+									/>
 								</div>
-								<img src={img} alt="cover" className="z-10 absolute bottom-0" />
+								<div className="z-10 absolute bottom-0 left-0 right-0" style={{ height: '75%' }}>
+									<div className="relative w-full h-full">
+										<Image 
+											src={img} 
+											alt={`${title} cover`}
+											fill
+											className="object-contain"
+										/>
+									</div>
+								</div>
 							</div>
 
 							<h1 className="font-bold lg:text-2xl md:text-xl text-base line-clamp-1">
@@ -45,17 +60,20 @@ const RecentProjects = () => {
 
 							<div className="flex items-center justify-between mt-7 mb-3">
 								<div className="flex items-center">
-									{iconLists.map((icon, index) => (
-										<div
-											key={index}
-											className="border border-white/20 rounded-full bg-black lg:w-10 lg:h-10 w-8 h-8 flex justify-center items-center"
-											style={{
-												transform: `translateX(-${5 * index + 2}px)`,
-											}}
-										>
-											<img src={icon} alt="icon5" className="p-2" />
-										</div>
-									))}
+									{iconLists.map((icon, index) => {
+										const iconName = icon.split('/').pop()?.replace('.svg', '') || `icon-${index}`;
+										return (
+											<div
+												key={icon}
+												className="border border-white/20 rounded-full bg-black lg:w-10 lg:h-10 w-8 h-8 flex justify-center items-center"
+												style={{
+													transform: `translateX(-${5 * index + 2}px)`,
+												}}
+											>
+												<img src={icon} alt={`${iconName} icon`} className="p-2" />
+											</div>
+										);
+									})}
 								</div>
 
 								<div className="flex justify-center items-center">

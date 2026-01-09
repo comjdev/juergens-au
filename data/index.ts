@@ -73,7 +73,7 @@ export const projects = [
     {
         id: 1,
         title: "Kubota MyAdman",
-        des: "Advertisement Management System for Kubota Australia and New Zealand, including image and media management, print colleteral creation and custom shp system.",
+        des: "Advertisement Management System for Kubota Australia and New Zealand, including image and media management, print collateral creation and custom shop system.",
         img: "/p1.svg",
         iconLists: ["/angular.svg", "/firebase.svg", "/ts.svg", "/material-ui.svg", "/stripe.svg"],
         link: "https://myadman.com.au",
@@ -123,33 +123,33 @@ export const projects = [
 export const testimonials = [
     {
         quote:
-            "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
+            "Collaborating with Christoph was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Christoph's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Christoph is the ideal partner.",
         name: "Michael Johnson",
         title: "Director of AlphaStream Technologies",
     },
     {
         quote:
-            "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-        name: "Michael Johnson",
-        title: "Director of AlphaStream Technologies",
+            "Christoph delivered a high-performance solution that exceeded our expectations. His technical expertise and attention to detail made the development process smooth and efficient. The final product is both beautiful and functional.",
+        name: "Sarah Chen",
+        title: "Product Manager at Tech Innovations",
     },
     {
         quote:
-            "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-        name: "Michael Johnson",
-        title: "Director of AlphaStream Technologies",
+            "Working with Christoph transformed our digital presence. His ability to translate complex requirements into elegant solutions is remarkable. We couldn't be happier with the results.",
+        name: "David Martinez",
+        title: "CEO of Digital Solutions Inc.",
     },
     {
         quote:
-            "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-        name: "Michael Johnson",
-        title: "Director of AlphaStream Technologies",
+            "Christoph's expertise in modern web technologies and his commitment to quality is unmatched. He delivered our project on time and within budget, with exceptional attention to user experience and performance.",
+        name: "Emily Watson",
+        title: "Founder of Creative Agency",
     },
     {
         quote:
-            "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-        name: "Michael Johnson",
-        title: "Director of AlphaStream Technologies",
+            "The level of professionalism and technical skill Christoph brings to every project is outstanding. He consistently delivers solutions that are both innovative and practical, making him an invaluable partner.",
+        name: "James Thompson",
+        title: "CTO of Startup Ventures",
     },
 ];
 

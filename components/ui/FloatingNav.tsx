@@ -28,17 +28,23 @@ export const FloatingNav = ({
 	useMotionValueEvent(scrollYProgress, "change", (current) => {
 		// Check if current is not undefined and is a number
 		if (typeof current === "number") {
-			const direction = current! - scrollYProgress.getPrevious()!;
+			const prev = scrollYProgress.getPrevious();
+			if (typeof prev === "number") {
+				const direction = current - prev;
 
-			if (scrollYProgress.get() < 0.05) {
-				// also set true for the initial state
-				setVisible(true);
-			} else {
-				if (direction < 0) {
+				if (scrollYProgress.get() < 0.05) {
+					// also set true for the initial state
 					setVisible(true);
 				} else {
-					setVisible(false);
+					if (direction < 0) {
+						setVisible(true);
+					} else {
+						setVisible(false);
+					}
 				}
+			} else {
+				// Initial case when prev is undefined
+				setVisible(true);
 			}
 		}
 	});
@@ -66,12 +72,12 @@ export const FloatingNav = ({
 				)}
 				style={{
 					backdropFilter: "blur(16px) saturate(180%)",
-					backgroundColor: "rgba(17, 25, 40, 0.75)",
+					backgroundColor: "var(--color-dark-blue-alpha)",
 					borderRadius: "12px",
-					border: "1px solid rgba(255, 255, 255, 0.125)",
+					border: "1px solid var(--color-overlay-light)",
 				}}
 			>
-				{navItems.map((navItem: any, idx: number) => (
+				{navItems.map((navItem, idx: number) => (
 					<Link
 						key={`link=${idx}`}
 						href={navItem.link}

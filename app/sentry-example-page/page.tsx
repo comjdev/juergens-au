@@ -1,7 +1,6 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
-import Head from "next/head";
 import { useEffect, useState } from "react";
 
 class SentryExampleFrontendError extends Error {
@@ -18,19 +17,20 @@ export default function Page() {
   useEffect(() => {
     Sentry.logger.info("Sentry example page loaded");
     async function checkConnectivity() {
-      const result = await Sentry.diagnoseSdkConnectivity();
-      setIsConnected(result !== "sentry-unreachable");
+      try {
+        const result = await Sentry.diagnoseSdkConnectivity();
+        setIsConnected(result !== "sentry-unreachable");
+      } catch (error) {
+        console.error("Failed to check Sentry connectivity:", error);
+        Sentry.logger?.error?.("Failed to check Sentry connectivity", error);
+        setIsConnected(false);
+      }
     }
     checkConnectivity();
   }, []);
 
   return (
     <div>
-      <Head>
-        <title>sentry-example-page</title>
-        <meta name="description" content="Test Sentry for your Next.js app!" />
-      </Head>
-
       <main>
         <div className="flex-spacer" />
         <svg
@@ -81,11 +81,11 @@ export default function Page() {
                 const res = await fetch("/api/sentry-example-api");
                 if (!res.ok) {
                   setHasSentError(true);
+                  throw new SentryExampleFrontendError(
+                    "This error is raised on the frontend of the example page.",
+                  );
                 }
               },
-            );
-            throw new SentryExampleFrontendError(
-              "This error is raised on the frontend of the example page.",
             );
           }}
           disabled={!isConnected}

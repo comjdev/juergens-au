@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { BackgroundGradientAnimation } from "./GradientAnimation";
 import { GridGlobe } from "./GridGlobe";
 import Lottie from "lottie-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import animationData from "@/data/confetti.json";
 import MagicButton from "./MagicButton";
 import { IoCopyOutline } from "react-icons/io5";
@@ -19,8 +19,7 @@ export const BentoGrid = ({
 	return (
 		<div
 			className={cn(
-				// change gap-4 to gap-8, change grid-cols-3 to grid-cols-5, remove md:auto-rows-[18rem], add responsive code
-				"grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 md:grid-row-7 gap-4 lg:gap-8 mx-auto",
+				"grid grid-cols-1 md:grid-cols-6 lg:grid-cols-5 gap-4 lg:gap-8 mx-auto",
 				className,
 			)}
 		>
@@ -49,10 +48,33 @@ export const BentoGridItem = ({
 	spareImg?: string;
 }) => {
 	const [copied, setCopied] = useState<boolean>(false);
+	const [animationKey, setAnimationKey] = useState<number>(0);
 
 	const handleCopy = () => {
 		navigator.clipboard.writeText("[email removed]");
 		setCopied(true);
+		setAnimationKey((prev) => prev + 1); // Force animation to restart
+	};
+
+	useEffect(() => {
+		if (copied) {
+			const timer = setTimeout(() => {
+				setCopied(false);
+			}, 5000);
+			return () => clearTimeout(timer);
+		}
+	}, [copied]);
+
+	const getAltText = (
+		titleValue: string | React.ReactNode | undefined,
+	): string => {
+		if (typeof titleValue === "string") {
+			return titleValue;
+		}
+		if (typeof titleValue === "number") {
+			return String(titleValue);
+		}
+		return "";
 	};
 
 	return (
@@ -63,7 +85,7 @@ export const BentoGridItem = ({
 			)}
 			style={{
 				background: "rgb(4,7,29)",
-				backgroundColor:
+				backgroundImage:
 					"linear-gradient(90deg, rgba(4,7,29,1) 0%, rgba(12,14,35,1) 100%)",
 			}}
 		>
@@ -73,7 +95,7 @@ export const BentoGridItem = ({
 						// eslint-disable-next-line @next/next/no-img-element
 						<img
 							src={img}
-							alt={title as string}
+							alt={getAltText(title)}
 							className={cn(imgClassName, "object-cover object-center")}
 						/>
 					)}
@@ -85,7 +107,7 @@ export const BentoGridItem = ({
 						// eslint-disable-next-line @next/next/no-img-element
 						<img
 							src={spareImg}
-							alt={title as string}
+							alt={getAltText(title)}
 							className="object-cover object-center w-full h-full"
 						/>
 					)}
@@ -140,14 +162,17 @@ export const BentoGridItem = ({
 
 					{id === 6 && (
 						<div className="mt-5 relative">
-							<div className={`absolute -bottom-5 right-0`}>
-								<Lottie
-									animationData={animationData}
-									loop={copied}
-									autoplay={copied}
-									style={{ width: "100%", height: "100%" }}
-								/>
-							</div>
+							{copied && (
+								<div className={`absolute -bottom-5 right-0`}>
+									<Lottie
+										key={animationKey}
+										animationData={animationData}
+										loop={false}
+										autoplay={true}
+										style={{ width: "100%", height: "100%" }}
+									/>
+								</div>
+							)}
 							<MagicButton
 								title={copied ? "Email copied" : "Copy my email"}
 								icon={<IoCopyOutline />}

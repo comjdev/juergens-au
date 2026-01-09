@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3, Group } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
@@ -60,14 +60,12 @@ interface WorldProps {
 	data: Position[];
 }
 
-const numbersOfRings = [0];
-
 export function Globe({ globeConfig, data }: WorldProps) {
 	const globeRef = useRef<ThreeGlobe | null>(null);
 	const groupRef = useRef<Group>(null);
 	const [isInitialized, setIsInitialized] = useState(false);
 
-	const defaultProps = {
+	const defaultProps = useMemo(() => ({
 		pointSize: 1,
 		atmosphereColor: "#ffffff",
 		showAtmosphere: true,
@@ -82,7 +80,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 		rings: 1,
 		maxRings: 3,
 		...globeConfig,
-	};
+	}), [globeConfig]);
 
 	// Initialize globe only once
 	useEffect(() => {
@@ -123,7 +121,12 @@ export function Globe({ globeConfig, data }: WorldProps) {
 		const points = [];
 		for (let i = 0; i < arcs.length; i++) {
 			const arc = arcs[i];
-			const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
+			const rgbResult = hexToRgb(arc.color);
+			if (!rgbResult) {
+				// Skip this arc if color conversion fails
+				continue;
+			}
+			const rgb = rgbResult;
 			points.push({
 				size: defaultProps.pointSize,
 				order: arc.order,
@@ -303,8 +306,11 @@ export function World(props: WorldProps) {
 		);
 	}
 
-	const scene = new Scene();
-	scene.fog = new Fog(0xffffff, 400, 2000);
+	const scene = useMemo(() => {
+		const s = new Scene();
+		s.fog = new Fog(0xffffff, 400, 2000);
+		return s;
+	}, []);
 	
 	return (
 		<Canvas 
