@@ -242,9 +242,27 @@ export function WebGLRendererConfig() {
 
 	useEffect(() => {
 		if (gl && size) {
-			gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-			gl.setSize(size.width, size.height);
-			gl.setClearColor(0x000000, 0); // Transparent background
+			try {
+				gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+				gl.setSize(size.width, size.height);
+				gl.setClearColor(0x000000, 0); // Transparent background
+				// Enable shadow maps if needed
+				gl.shadowMap.enabled = false;
+				
+				// Chrome-specific: ensure context is not lost
+				const canvas = gl.domElement;
+				if (canvas) {
+					canvas.addEventListener('webglcontextlost', (e) => {
+						e.preventDefault();
+						console.warn('WebGL context lost');
+					});
+					canvas.addEventListener('webglcontextrestored', () => {
+						console.log('WebGL context restored');
+					});
+				}
+			} catch (error) {
+				console.error('Error configuring WebGL renderer:', error);
+			}
 		}
 	}, [gl, size]);
 
@@ -255,75 +273,86 @@ function isWebGLAvailable(): boolean {
 	if (typeof window === "undefined") return false;
 	try {
 		const canvas = document.createElement("canvas");
+		// Try WebGL2 first, then WebGL, then experimental
 		const gl =
-			canvas.getContext("webgl") || 
-			canvas.getContext("experimental-webgl") ||
-			canvas.getContext("webgl2");
+			canvas.getContext("webgl2", { preserveDrawingBuffer: false }) ||
+			canvas.getContext("webgl", { preserveDrawingBuffer: false }) || 
+			canvas.getContext("experimental-webgl", { preserveDrawingBuffer: false });
 		
-		if (!gl) return false;
-		
-		// Basic check - just verify we can get parameters
-		try {
-			const version = gl.getParameter(gl.VERSION);
-			return !!version;
-		} catch (e) {
-			return false;
-		}
+		// If we got a context, WebGL is available
+		// Don't do additional checks that might fail unnecessarily
+		return !!gl;
 	} catch (e) {
+		// If context creation fails, WebGL is not available
 		return false;
 	}
 }
 
 export function World(props: WorldProps) {
 	const { globeConfig } = props;
-	const [webGLAvailable, setWebGLAvailable] = useState<boolean | null>(null);
-
-	useEffect(() => {
-		// Check WebGL availability after component mounts
-		if (typeof window !== "undefined") {
-			const available = isWebGLAvailable();
-			setWebGLAvailable(available);
-		}
-	}, []);
-
-	// Show loading state while checking
-	if (webGLAvailable === null) {
-		return (
-			<div className="flex items-center justify-center w-full h-full">
-				<div className="text-sm text-gray-400">Loading...</div>
-			</div>
-		);
-	}
-
-	// Show error if WebGL not available
-	if (webGLAvailable === false) {
-		return (
-			<div className="flex items-center justify-center w-full h-full">
-				<div className="text-sm text-gray-400">
-					WebGL is not available in your browser
-				</div>
-			</div>
-		);
-	}
+	const [webGLError, setWebGLError] = useState<string | null>(null);
 
 	const scene = useMemo(() => {
 		const s = new Scene();
 		s.fog = new Fog(0xffffff, 400, 2000);
 		return s;
 	}, []);
+
+	// Show error message if WebGL fails
+	if (webGLError) {
+		return (
+			<div className="flex items-center justify-center w-full h-full">
+				<div className="text-sm text-gray-400 text-center p-4">
+					<p>WebGL is not available in your browser.</p>
+					<p className="mt-2 text-xs">
+						If using Chrome, try enabling hardware acceleration in Settings → System.
+					</p>
+				</div>
+			</div>
+		);
+	}
 	
 	return (
 		<Canvas 
 			scene={scene} 
 			camera={new PerspectiveCamera(50, aspect, 180, 1800)}
-			style={{ width: '100%', height: '100%' }}
+			style={{ width: '100%', height: '100%', display: 'block' }}
 			gl={{ 
 				antialias: true, 
 				alpha: true,
 				powerPreference: "high-performance",
-				failIfMajorPerformanceCaveat: false
+				failIfMajorPerformanceCaveat: false,
+				preserveDrawingBuffer: false,
+				stencil: false,
+				depth: true,
+				// Try to work around Chrome sandbox issues
+				xrCompatible: false
 			}}
 			dpr={[1, 2]}
+			frameloop="always"
+			onError={(error) => {
+				console.error('Canvas error:', error);
+				setWebGLError(error.message || 'WebGL context could not be created');
+			}}
+			onCreated={({ gl, scene: createdScene, camera: createdCamera }) => {
+				// Chrome-specific: ensure WebGL context is valid
+				try {
+					if (gl) {
+						const context = gl.getContext();
+						if (!context) {
+							setWebGLError('WebGL context lost or invalid');
+							return;
+						}
+						// Force a render to ensure Chrome initializes properly
+						if (createdScene && createdCamera) {
+							gl.render(createdScene, createdCamera);
+						}
+					}
+				} catch (error) {
+					console.error('Error in Canvas onCreated:', error);
+					setWebGLError(error instanceof Error ? error.message : 'Failed to initialize WebGL');
+				}
+			}}
 		>
 			<WebGLRendererConfig />
 			<ambientLight color={globeConfig.ambientLight} intensity={0.6} />
