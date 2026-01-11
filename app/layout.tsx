@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "Christoph Jürgens",
-	description: "Christoph Jürgens - Software Engineer",
+	title: "Christoph Jürgens | Software Engineer and Consultant",
+	description: "Christoph Jürgens - Software Engineer and Consultant",
 	icons: {
 		icon: "/favicon.ico",
 	},
