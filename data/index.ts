@@ -350,10 +350,36 @@ export const socialMedia = [
     },
 ];
 
-// Obfuscated email parts to avoid spam bots
+// Get email from environment variable
+// Supports both NEXT_PUBLIC_EMAIL (for client-side access) and EMAIL (server-side)
+const getEmailFromEnv = (): string => {
+	const email =
+		process.env.NEXT_PUBLIC_EMAIL || process.env.EMAIL || "";
+	if (!email && process.env.NODE_ENV === "production") {
+		console.warn(
+			"Email address not configured. Set NEXT_PUBLIC_EMAIL or EMAIL environment variable.",
+		);
+	}
+	return email;
+};
+
+// Convert email to obfuscated parts
 // Format: [reversedDomain, reversedUsername]
 // For "[email removed]": domain="juergens.au" -> "ua.snegreuj", username="contact" -> "tcatnoc"
-export const emailAddressParts: [string, string] = ["[email parts removed]"];
+const emailToObfuscatedParts = (email: string): [string, string] => {
+	const [username, domain] = email.split("@");
+	if (!username || !domain) {
+		return ["", ""];
+	}
+	return [
+		domain.split("").reverse().join(""),
+		username.split("").reverse().join(""),
+	];
+};
 
-// Keep the plain email for backward compatibility (will be removed in favor of obfuscated version)
-export const emailAddress = "[email removed]";
+const emailAddress = getEmailFromEnv();
+export const emailAddressParts: [string, string] = emailAddress
+	? emailToObfuscatedParts(emailAddress)
+	: (["", ""] as [string, string]);
+
+export { emailAddress };

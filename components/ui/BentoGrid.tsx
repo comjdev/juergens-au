@@ -54,6 +54,10 @@ export const BentoGridItem = ({
 	const email = useObfuscatedEmail(emailAddressParts);
 
 	const handleCopy = () => {
+		if (!email) {
+			console.warn("Email address not configured");
+			return;
+		}
 		navigator.clipboard.writeText(email);
 		setCopied(true);
 		setAnimationKey((prev) => prev + 1); // Force animation to restart
@@ -188,7 +192,7 @@ export const BentoGridItem = ({
 						</div>
 					)}
 
-					{id === 6 && (
+					{id === 6 && email && (
 						<div className="mt-5 relative">
 							{copied && (
 								<div className={`absolute -bottom-5 right-0`}>

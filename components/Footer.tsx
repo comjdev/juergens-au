@@ -25,13 +25,15 @@ const Footer = () => {
 					Reach out to me today and let&apos;s discuss how I can help you
 					achieve your goals.
 				</p>
-				<ObfuscatedEmail parts={emailAddressParts}>
-					<MagicButton
-						title="Let's get in touch"
-						icon={<FaLocationArrow />}
-						position="right"
-					/>
-				</ObfuscatedEmail>
+				{emailAddressParts[0] && emailAddressParts[1] && (
+					<ObfuscatedEmail parts={emailAddressParts}>
+						<MagicButton
+							title="Let's get in touch"
+							icon={<FaLocationArrow />}
+							position="right"
+						/>
+					</ObfuscatedEmail>
+				)}
 			</div>
 			<div className="flex mt-16 md:flex-row flex-col justify-between items-center">
 				<div className="flex flex-col gap-1">
