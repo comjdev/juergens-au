@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./theme-provider";
 
 const inter = Inter({
 	variable: "--font-inter",
@@ -8,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "Christoph Jürgens",
-	description: "Christoph Jürgens - Software Engineer",
+	title: "Christoph Jürgens | Software Engineer and Consultant",
+	description: "Christoph Jürgens - Software Engineer and Consultant",
 	icons: {
 		icon: "/favicon.ico",
 	},
@@ -26,8 +27,20 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className={`${inter.variable} antialiased`}>{children}</body>
+		<html lang="en-AU" suppressHydrationWarning>
+			<body
+				className={`${inter.variable} antialiased`}
+				suppressHydrationWarning
+			>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="dark"
+					enableSystem
+					disableTransitionOnChange
+				>
+					{children}
+				</ThemeProvider>
+			</body>
 		</html>
 	);
 }
