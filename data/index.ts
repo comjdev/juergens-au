@@ -1,25 +1,25 @@
 export const navItems = [
     { name: "About", link: "#about" },
     { name: "Projects", link: "#projects" },
-    { name: "Testimonials", link: "#testimonials" },
+    { name: "Technologies", link: "#technologies" },
     { name: "Contact", link: "#contact" },
 ];
 
 export const gridItems = [
     {
         id: 1,
-        title: "I prioritize client collaboration, fostering open communication ",
+        title: "Full Stack Engineering",
         description: "",
         className: "lg:col-span-3 md:col-span-3 md:row-span-4 lg:min-h-[60vh]",
         imgClassName: "w-full h-full",
         titleClassName: "justify-end",
-        img: "/b1.svg",
+        img: "/background.jpg",
         spareImg: "",
     },
     {
         id: 2,
-        title: "I'm very flexible with time zone communications",
-        description: "",
+        title: "Christoph Jürgens",
+        description: "Senior Software Engineer",
         className: "lg:col-span-2 md:col-span-1 md:row-span-2",
         imgClassName: "",
         titleClassName: "justify-start",
@@ -38,18 +38,17 @@ export const gridItems = [
     },
     {
         id: 4,
-        title: "Tech enthusiast with a passion for development.",
-        description: "",
+        title: "Web, Mobile and Cloud",
+        description: "13+ years of experience in ",
         className: "lg:col-span-2 md:col-span-1 md:row-span-1",
         imgClassName: "",
         titleClassName: "justify-start",
         img: "/grid.svg",
         spareImg: "/b4.svg",
     },
-
     {
         id: 5,
-        title: "Currently building a JS Animation library",
+        title: "Currently building BJJ React Native App",
         description: "The Inside Scoop",
         className: "md:col-span-3 md:row-span-2",
         imgClassName: "absolute right-0 bottom-0 md:w-96 w-60",
@@ -69,12 +68,94 @@ export const gridItems = [
     },
 ];
 
+export const skills = [
+    {
+        id: 1,
+        title: "Frontend Development",
+        description: "Building responsive and performant user interfaces with modern frontend technologies.",
+        skills: [
+            "Angular",
+            "React",
+            "Next.js",
+            "Tailwind CSS",
+            "TypeScript",
+            "Material UI",
+        ],
+    },
+    {
+        id: 2,
+        title: "Backend and API Development",
+        description: "Creating scalable backend systems and APIs with a focus on performance and reliability.",
+        skills: [
+            "Node.js",
+            "PHP",
+            "Nest.js",
+            "Express.js",
+            "SQL and NoSQL databases",
+            "Redis",
+        ],
+    },
+    {
+        id: 3,
+        title: "Mobile Development",
+        description: "Developing cross-platform mobile applications with smooth user experiences.",
+        skills: [
+            "React Native",
+            "Expo",
+            "Ionic",
+            "Capacitor",
+            "RevenueCat"
+        ],
+    },
+    {
+        id: 4,
+        title: "Testing and DevOps",
+        description: "Improving code quality and delivery through testing and automated pipelines.",
+        skills: [
+            "GitHub Actions",
+            "AWS CodePipeline",
+            "Jest",
+            "React Testing Library",
+            "Cypress",
+            "Playwright",
+            "Vitest",
+        ],
+    },
+    {
+        id: 5,
+        title: "AI and Tooling",
+        description: "Using AI and developer tools to boost productivity and code quality.",
+        skills: [
+            "Cursor",
+            "CodeRabbit",
+            "Sentry",
+            "GitHub Copilot",
+            "OpenAI API",
+        ],
+    },
+    {
+        id: 6,
+        title: "Hosting and Deployment",
+        description: "Deploying and managing applications across modern cloud platforms.",
+        skills: [
+            "AWS",
+            "Vercel",
+            "Firebase",
+            "Supabase",
+            "Heroku",
+            "Railway",
+        ],
+    },
+];
+
+
+
 export const projects = [
     {
         id: 1,
         title: "Kubota MyAdman",
         des: "Advertisement Management System for Kubota Australia and New Zealand, including image and media management, print collateral creation and custom shop system.",
-        img: "/p1.svg",
+        img: "/myadman.png",
         iconLists: ["/angular.svg", "/firebase.svg", "/ts.svg", "/material-ui.svg", "/stripe.svg"],
         link: "https://myadman.com.au",
     },
@@ -82,7 +163,7 @@ export const projects = [
         id: 2,
         title: "Kubota Connect",
         des: "Kubota Connect headless CMS powering six AU and NZ websites with dealer APIs, server-side rendering, scalable architecture, high performance, and strong SEO.",
-        img: "/p2.svg",
+        img: "/kubota.png",
         iconLists: ["/angular.svg", "/nestjs.svg", "/ts.svg", "/wordpress.svg", "/express.svg", "/aws.svg"],
         link: "https://kubota.com.au",
     },
@@ -90,7 +171,7 @@ export const projects = [
         id: 3,
         title: "Sleep Maestro Mobile App",
         des: "Sleep Maestro uses hypnosis and calming audio sessions to help you deeply relax, beat insomnia and improve sleep quality with curated soundscapes and mindset resets.",
-        img: "/p3.svg",
+        img: "/sleep.png",
         iconLists: ["/re.svg", "/firebase.svg", "/ts.svg", "/expo.svg"],
         link: "https://apps.apple.com/au/app/sleep-maestro/id1560045556",
     },
@@ -98,7 +179,7 @@ export const projects = [
         id: 4,
         title: "Kando Martial Arts",
         des: "High-performance web presence for Kando Martial Arts Knox, optimised for fast loading, strong SEO and local search visibility to boost classes and community engagement.",
-        img: "/p4.svg",
+        img: "/kando.png",
         iconLists: ["/re.svg", "/astro.svg", "/tail.svg", "/aws.svg", "/gsap.svg"],
         link: "https://knoxmartialarts.com.au",
     },
@@ -106,7 +187,7 @@ export const projects = [
         id: 5,
         title: "Grounded Marketing",
         des: "Highly animated and engaging web presence for Grounded Marketing, showcasing dynamic visuals, fast interactions, strong SEO, and standout performance to captivate and convert visitors.",
-        img: "/p3.svg",
+        img: "/grounded.png",
         iconLists: ["/javascript.svg", "/aws.svg", "/gsap.svg"],
         link: "https://grounded360.com.au/",
     },
@@ -114,7 +195,7 @@ export const projects = [
         id: 6,
         title: "AHS Group",
         des: "Lightning-fast headless SPA for AHS Group featuring server-side rendering, optimal SEO, high engagement, and a CMS with APIs for live data.",
-        img: "/p4.svg",
+        img: "/ahs-website.png",
         iconLists: ["/angular.svg", "/nestjs.svg", "/ts.svg", "/wordpress.svg", "/aws.svg"],
         link: "https://www.ahsgroup.com.au",
     },
@@ -124,14 +205,14 @@ export const testimonials = [
     {
         quote:
             "Collaborating with Christoph was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Christoph's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Christoph is the ideal partner.",
-        name: "Michael Johnson",
-        title: "Director of AlphaStream Technologies",
+        name: "Benjamin Holzner",
+        title: "Managing Director of Pearlgolf",
     },
     {
         quote:
             "Christoph delivered a high-performance solution that exceeded our expectations. His technical expertise and attention to detail made the development process smooth and efficient. The final product is both beautiful and functional.",
-        name: "Sarah Chen",
-        title: "Product Manager at Tech Innovations",
+        name: "John Mull",
+        title: "Product Manager at Assyst GmbH",
     },
     {
         quote:
@@ -156,66 +237,100 @@ export const testimonials = [
 export const companies = [
     {
         id: 1,
-        name: "cloudinary",
-        img: "/cloud.svg",
-        nameImg: "/cloudName.svg",
+        name: "assyst",
+        img: "/assyst.svg",
     },
     {
         id: 2,
-        name: "appwrite",
-        img: "/app.svg",
-        nameImg: "/appName.svg",
+        name: "kubota",
+        img: "/kubota.svg",
     },
     {
         id: 3,
-        name: "HOSTINGER",
-        img: "/host.svg",
-        nameImg: "/hostName.svg",
+        name: "denso",
+        img: "/denso.svg",
     },
     {
         id: 4,
-        name: "stream",
-        img: "/s.svg",
-        nameImg: "/streamName.svg",
+        name: "hindsight",
+        img: "/hindsight.svg",
     },
     {
         id: 5,
-        name: "docker.",
-        img: "/dock.svg",
-        nameImg: "/dockerName.svg",
+        name: "theapphub",
+        img: "/theapphub.svg",
+
+    },
+
+    {
+        id: 6,
+        name: "ahs",
+        img: "/ahs.svg",
+
+    },
+    {
+        id: 7,
+        name: "pearlgolf",
+        img: "/pearlgolf.svg",
+
+    },
+    {
+        id: 8,
+        name: "quest",
+        img: "/quest.svg",
+
+    },
+    {
+        id: 9,
+        name: "krone",
+        img: "/krone.svg",
+
+    },
+    {
+        id: 10,
+        name: "greatplains",
+        img: "/greatplains.svg",
+
+    },
+    {
+        id: 11,
+        name: "redheads",
+        img: "/redheads.svg",
+
     },
 ];
 
 export const workExperience = [
     {
         id: 1,
-        title: "Frontend Engineer Intern",
-        desc: "Assisted in the development of a web-based platform using React.js, enhancing interactivity.",
+        title: "Tech Lead & Solutions Architect",
+        desc: "Leading development and driving architectural decisions for scalable web products for Kubota Australia and New Zealand.",
         className: "md:col-span-2",
         thumbnail: "/exp1.svg",
     },
     {
         id: 2,
-        title: "Mobile App Dev - JSM Tech",
-        desc: "Designed and developed mobile app for both iOS & Android platforms using React Native.",
-        className: "md:col-span-2", // change to md:col-span-2
+        title: "Development Manager",
+        desc: "Oversaw frontend and full-stack delivery, mentoring engineers and improving code quality.",
+        className: "md:col-span-2",
         thumbnail: "/exp2.svg",
     },
     {
         id: 3,
-        title: "Freelance App Dev Project",
-        desc: "Led the dev of a mobile app for a client, from initial concept to deployment on app stores.",
-        className: "md:col-span-2", // change to md:col-span-2
+        title: "Senior Software Developer",
+        desc: "Delivered high-impact features across web platforms, focusing on performance and maintainability.",
+        className: "md:col-span-2",
         thumbnail: "/exp3.svg",
     },
     {
         id: 4,
-        title: "Lead Frontend Developer",
-        desc: "Developed and maintained user-facing features using modern frontend technologies.",
+        title: "Software Developer",
+        desc: "Built robust backend APIs and frontend interfaces, contributing to key product launches and iterations.",
         className: "md:col-span-2",
         thumbnail: "/exp4.svg",
-    },
+    }
 ];
+
 
 export const socialMedia = [
     {
@@ -235,4 +350,10 @@ export const socialMedia = [
     },
 ];
 
+// Obfuscated email parts to avoid spam bots
+// Format: [reversedDomain, reversedUsername]
+// For "[email removed]": domain="juergens.au" -> "ua.snegreuj", username="contact" -> "tcatnoc"
+export const emailAddressParts: [string, string] = ["[email parts removed]"];
+
+// Keep the plain email for backward compatibility (will be removed in favor of obfuscated version)
 export const emailAddress = "[email removed]";

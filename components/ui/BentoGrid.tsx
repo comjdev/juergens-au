@@ -2,12 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import { BackgroundGradientAnimation } from "./GradientAnimation";
-import { GridGlobe } from "./GridGlobe";
 import Lottie from "lottie-react";
 import { useState, useEffect } from "react";
 import animationData from "@/data/confetti.json";
 import MagicButton from "./MagicButton";
 import { IoCopyOutline } from "react-icons/io5";
+import { emailAddressParts } from "@/data";
+import { useObfuscatedEmail } from "./ObfuscatedEmail";
+import { PixelatedCanvas } from "./PixelatedCanvas";
 
 export const BentoGrid = ({
 	className,
@@ -49,9 +51,10 @@ export const BentoGridItem = ({
 }) => {
 	const [copied, setCopied] = useState<boolean>(false);
 	const [animationKey, setAnimationKey] = useState<number>(0);
+	const email = useObfuscatedEmail(emailAddressParts);
 
 	const handleCopy = () => {
-		navigator.clipboard.writeText("[email removed]");
+		navigator.clipboard.writeText(email);
 		setCopied(true);
 		setAnimationKey((prev) => prev + 1); // Force animation to restart
 	};
@@ -101,7 +104,9 @@ export const BentoGridItem = ({
 					)}
 				</div>
 				<div
-					className={`absolute right-0 -bottom-5 ${id && "w-full opacity-80"}`}
+					className={`absolute right-0 -bottom-5 ${
+						id === 4 && "w-full opacity-80"
+					}`}
 				>
 					{spareImg && (
 						// eslint-disable-next-line @next/next/no-img-element
@@ -123,14 +128,37 @@ export const BentoGridItem = ({
 						"group-hover/bento:translate-x-2 transition duration-200 relative md:h-full min-h-40 flex flex-col px-5 p-5 lg:p-10",
 					)}
 				>
-					<div className="font-sans font-extralight md:max-w-32 text-sm md:text-xs lg:text-base text-[#C1C2D3] z-10">
-						{description}
-					</div>
-					<div className="font-sans font-bold text-lg lg:text-3xl max-w-96 z-10">
-						{title}
-					</div>
+					{id === 2 && (
+						<PixelatedCanvas
+							src="/christoph.png"
+							width={300}
+							height={200}
+							cellSize={3}
+							dotScale={0.9}
+							shape="circle"
+							dropoutStrength={0}
+							interactive
+							distortionStrength={0.1}
+							distortionRadius={40}
+							distortionMode="repel"
+							followSpeed={0.2}
+							jitterStrength={5}
+							jitterSpeed={3}
+							sampleAverage
+							responsive={true}
+							className="absolute top-2 right-0"
+						/>
+					)}
 
-					{id === 2 && <GridGlobe />}
+					<div className={`${id === 2 && "absolute bottom-10"}`}>
+						<div className=" font-sans font-extralight md:max-w-64 text-sm md:text-xs lg:text-base text-[#C1C2D3] z-10">
+							{description}
+						</div>
+
+						<div className="font-sans font-bold text-lg lg:text-3xl max-w-96 z-10">
+							{title}
+						</div>
+					</div>
 
 					{id === 3 && (
 						<div className="flex gap-1 lg:gap-5 w-fit absolute -right-3 lg:-right-2">

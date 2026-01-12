@@ -3,10 +3,11 @@ import { FloatingNav } from "@/components/ui/FloatingNav";
 import Grid from "@/components/Grid";
 import RecentProjects from "@/components/RecentProjects";
 import { navItems } from "@/data";
-import Clients from "@/components/Clients";
 import Experiance from "@/components/Experiance";
 import Process from "@/components/Process";
 import Footer from "@/components/Footer";
+import Skills from "@/components/Skills";
+import Brands from "@/components/Brands";
 
 export default function Home() {
 	return (
@@ -16,10 +17,13 @@ export default function Home() {
 				<Hero />
 				<Grid />
 				<RecentProjects />
-				<Clients />
+				<Skills />
+				{/* <Clients /> */}
+			</div>
+			<Brands />
+			<div className="max-w-7xl w-full">
 				<Experiance />
 				<Process />
-
 				<Footer />
 			</div>
 		</main>

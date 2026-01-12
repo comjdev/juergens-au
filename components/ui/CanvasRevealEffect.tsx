@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 
 export const CanvasRevealEffect = ({
@@ -187,57 +187,57 @@ const ShaderMaterial = ({
 	maxFps = 60,
 }: {
 	source: string;
-	hovered?: boolean;
 	maxFps?: number;
 	uniforms: Uniforms;
 }) => {
 	const { size } = useThree();
-	const ref = useRef<THREE.Mesh>();
-	let lastFrameTime = 0;
+	const ref = useRef<THREE.Mesh>(null);
+	const lastFrameTimeRef = useRef(0);
 
 	useFrame(({ clock }) => {
 		if (!ref.current) return;
 		const timestamp = clock.getElapsedTime();
-		if (timestamp - lastFrameTime < 1 / maxFps) {
+		if (timestamp - lastFrameTimeRef.current < 1 / maxFps) {
 			return;
 		}
-		lastFrameTime = timestamp;
+		lastFrameTimeRef.current = timestamp;
 
-		const material: any = ref.current.material;
+		const material = ref.current.material as THREE.ShaderMaterial;
 		const timeLocation = material.uniforms.u_time;
 		timeLocation.value = timestamp;
 	});
 
-	const getUniforms = () => {
-		const preparedUniforms: any = {};
+	const preparedUniforms = useMemo(() => {
+		const uniformsResult: Record<string, { value: unknown; type?: string }> =
+			{};
 
 		for (const uniformName in uniforms) {
-			const uniform: any = uniforms[uniformName];
+			const uniform = uniforms[uniformName];
 
 			switch (uniform.type) {
 				case "uniform1f":
-					preparedUniforms[uniformName] = { value: uniform.value, type: "1f" };
+					uniformsResult[uniformName] = { value: uniform.value, type: "1f" };
 					break;
 				case "uniform3f":
-					preparedUniforms[uniformName] = {
-						value: new THREE.Vector3().fromArray(uniform.value),
+					uniformsResult[uniformName] = {
+						value: new THREE.Vector3().fromArray(uniform.value as number[]),
 						type: "3f",
 					};
 					break;
 				case "uniform1fv":
-					preparedUniforms[uniformName] = { value: uniform.value, type: "1fv" };
+					uniformsResult[uniformName] = { value: uniform.value, type: "1fv" };
 					break;
 				case "uniform3fv":
-					preparedUniforms[uniformName] = {
-						value: uniform.value.map((v: number[]) =>
+					uniformsResult[uniformName] = {
+						value: (uniform.value as number[][]).map((v: number[]) =>
 							new THREE.Vector3().fromArray(v),
 						),
 						type: "3fv",
 					};
 					break;
 				case "uniform2f":
-					preparedUniforms[uniformName] = {
-						value: new THREE.Vector2().fromArray(uniform.value),
+					uniformsResult[uniformName] = {
+						value: new THREE.Vector2().fromArray(uniform.value as number[]),
 						type: "2f",
 					};
 					break;
@@ -247,12 +247,12 @@ const ShaderMaterial = ({
 			}
 		}
 
-		preparedUniforms["u_time"] = { value: 0, type: "1f" };
-		preparedUniforms["u_resolution"] = {
+		uniformsResult["u_time"] = { value: 0, type: "1f" };
+		uniformsResult["u_resolution"] = {
 			value: new THREE.Vector2(size.width * 2, size.height * 2),
 		}; // Initialize u_resolution
-		return preparedUniforms;
-	};
+		return uniformsResult;
+	}, [size.width, size.height, uniforms]);
 
 	// Shader material
 	const material = useMemo(() => {
@@ -271,7 +271,7 @@ const ShaderMaterial = ({
       }
       `,
 			fragmentShader: source,
-			uniforms: getUniforms(),
+			uniforms: preparedUniforms,
 			glslVersion: THREE.GLSL3,
 			blending: THREE.CustomBlending,
 			blendSrc: THREE.SrcAlphaFactor,
@@ -279,23 +279,137 @@ const ShaderMaterial = ({
 		});
 
 		return materialObject;
-	}, [size.width, size.height, source]);
+	}, [size.width, size.height, source, preparedUniforms]);
 
 	return (
-		<mesh ref={ref as any}>
+		<mesh ref={ref}>
 			<planeGeometry args={[2, 2]} />
 			<primitive object={material} attach="material" />
 		</mesh>
 	);
 };
 
+// Check if WebGL is available
+const isWebGLAvailable = (): boolean => {
+	if (globalThis.window === undefined) return false;
+
+	try {
+		const canvas = document.createElement("canvas");
+		const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+
+		if (!gl) {
+			return false;
+		}
+
+		// Additional check: try to create a program
+		const program = gl.createProgram();
+		if (!program) {
+			return false;
+		}
+
+		// Clean up
+		gl.deleteProgram(program);
+		return true;
+	} catch {
+		return false;
+	}
+};
+
 const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
+	// Initialize with WebGL check result
+	const [webGLAvailable] = useState(() => {
+		if (globalThis.window === undefined) return false;
+		return isWebGLAvailable();
+	});
+
+	// Initialize error state based on WebGL availability
+	const [hasError, setHasError] = useState(() => {
+		if (globalThis.window === undefined) return true;
+		return !isWebGLAvailable();
+	});
+
+	// Handle unhandled promise rejections from WebGL initialization
+	useEffect(() => {
+		const handleRejection = (event: PromiseRejectionEvent) => {
+			if (
+				event.reason?.message?.includes("WebGL") ||
+				event.reason?.message?.includes("WebGL context") ||
+				event.reason?.message?.includes("Could not create a WebGL context")
+			) {
+				event.preventDefault(); // Prevent error from showing in console
+				setHasError(true);
+			}
+		};
+
+		// Handle WebGL context lost/restored events
+		const handleContextLost = (event: Event) => {
+			event.preventDefault();
+			setHasError(true);
+		};
+
+		globalThis.addEventListener("unhandledrejection", handleRejection);
+		globalThis.addEventListener("webglcontextlost", handleContextLost);
+
+		return () => {
+			globalThis.removeEventListener("unhandledrejection", handleRejection);
+			globalThis.removeEventListener("webglcontextlost", handleContextLost);
+		};
+	}, []);
+
+	if (hasError || !webGLAvailable) {
+		return null; // Silently fail - the gradient overlay will still show
+	}
+
 	return (
-		<Canvas className="absolute inset-0  h-full w-full">
-			<ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
-		</Canvas>
+		<ErrorBoundary onError={() => setHasError(true)}>
+			<Canvas
+				className="absolute inset-0 h-full w-full"
+				onError={(error) => {
+					console.warn("Canvas error:", error);
+					setHasError(true);
+				}}
+				gl={{
+					antialias: false,
+					alpha: true,
+					powerPreference: "default",
+					failIfMajorPerformanceCaveat: false,
+				}}
+			>
+				<ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
+			</Canvas>
+		</ErrorBoundary>
 	);
 };
+
+// Simple Error Boundary component
+class ErrorBoundary extends React.Component<
+	{
+		children: React.ReactNode;
+		onError?: () => void;
+	},
+	{ hasError: boolean }
+> {
+	constructor(props: { children: React.ReactNode; onError?: () => void }) {
+		super(props);
+		this.state = { hasError: false };
+	}
+
+	static getDerivedStateFromError() {
+		return { hasError: true };
+	}
+
+	componentDidCatch() {
+		this.props.onError?.();
+	}
+
+	render() {
+		if (this.state.hasError) {
+			return null;
+		}
+
+		return this.props.children;
+	}
+}
 interface ShaderProps {
 	source: string;
 	uniforms: {

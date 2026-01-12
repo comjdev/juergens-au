@@ -25,17 +25,21 @@ const RecentProjects = () => {
 									className="relative w-full h-full overflow-hidden lg:rounded-3xl"
 									style={{ backgroundColor: "#13162D" }}
 								>
-									<Image 
-										src="/bg.png" 
-										alt={`${title} background`}
-										fill
+									<Image
+										src="/bg.png"
+										alt={title}
 										className="object-cover"
+										width={570}
+										height={400}
 									/>
 								</div>
-								<div className="z-10 absolute bottom-0 left-0 right-0" style={{ height: '75%' }}>
+								<div
+									className="z-10 absolute bottom-0 left-0 right-0"
+									style={{ height: "75%" }}
+								>
 									<div className="relative w-full h-full">
-										<Image 
-											src={img} 
+										<Image
+											src={img}
 											alt={`${title} cover`}
 											fill
 											className="object-contain"
@@ -61,7 +65,9 @@ const RecentProjects = () => {
 							<div className="flex items-center justify-between mt-7 mb-3">
 								<div className="flex items-center">
 									{iconLists.map((icon, index) => {
-										const iconName = icon.split('/').pop()?.replace('.svg', '') || `icon-${index}`;
+										const iconName =
+											icon.split("/").pop()?.replace(".svg", "") ||
+											`icon-${index}`;
 										return (
 											<div
 												key={icon}
@@ -70,7 +76,11 @@ const RecentProjects = () => {
 													transform: `translateX(-${5 * index + 2}px)`,
 												}}
 											>
-												<img src={icon} alt={`${iconName} icon`} className="p-2" />
+												<img
+													src={icon}
+													alt={`${iconName} icon`}
+													className="p-2"
+												/>
 											</div>
 										);
 									})}
