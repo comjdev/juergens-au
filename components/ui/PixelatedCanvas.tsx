@@ -57,6 +57,7 @@ export const PixelatedCanvas: React.FC<PixelatedCanvasProps> = ({
 	cellSize = 3,
 	dotScale = 0.9,
 	shape = "square",
+	backgroundColor,
 	grayscale = false,
 	className,
 	responsive = false,

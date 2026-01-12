@@ -81,7 +81,7 @@ export const MovingBorder = ({
 	ry?: string;
 	[key: string]: any;
 }) => {
-	const pathRef = useRef<any>();
+	const pathRef = useRef<SVGPathElement | null>(null);
 	const progress = useMotionValue<number>(0);
 
 	useAnimationFrame((time) => {
@@ -103,6 +103,9 @@ export const MovingBorder = ({
 
 	const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) translateX(-50%) translateY(-50%)`;
 
+	// Create a path that represents the border of a rounded rectangle
+	const pathD = `M ${rx || 0},0 L calc(100% - ${rx || 0}),0 Q 100%,0 100%,${ry || 0} L 100%,calc(100% - ${ry || 0}) Q 100%,100% calc(100% - ${rx || 0}),100% L ${rx || 0},100% Q 0,100% 0,calc(100% - ${ry || 0}) L 0,${ry || 0} Q 0,0 ${rx || 0},0 Z`;
+
 	return (
 		<>
 			<svg
@@ -113,12 +116,9 @@ export const MovingBorder = ({
 				height="100%"
 				{...otherProps}
 			>
-				<rect
+				<path
 					fill="none"
-					width="100%"
-					height="100%"
-					rx={rx}
-					ry={ry}
+					d={pathD}
 					ref={pathRef}
 				/>
 			</svg>
