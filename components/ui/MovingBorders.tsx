@@ -86,7 +86,7 @@ export const MovingBorder = ({
 
 	useAnimationFrame((time) => {
 		const length = pathRef.current?.getTotalLength();
-		if (length) {
+		if (length && length > 0) {
 			const pxPerMillisecond = length / duration;
 			progress.set((time * pxPerMillisecond) % length);
 		}
@@ -94,17 +94,48 @@ export const MovingBorder = ({
 
 	const x = useTransform(
 		progress,
-		(val) => pathRef.current?.getPointAtLength(val).x,
+		(val) => {
+			try {
+				const path = pathRef.current;
+				if (!path) return 0;
+				const length = path.getTotalLength();
+				if (length === 0) return 0;
+				return path.getPointAtLength(Math.min(val, length - 0.1)).x;
+			} catch {
+				return 0;
+			}
+		},
 	);
 	const y = useTransform(
 		progress,
-		(val) => pathRef.current?.getPointAtLength(val).y,
+		(val) => {
+			try {
+				const path = pathRef.current;
+				if (!path) return 0;
+				const length = path.getTotalLength();
+				if (length === 0) return 0;
+				return path.getPointAtLength(Math.min(val, length - 0.1)).y;
+			} catch {
+				return 0;
+			}
+		},
 	);
 
 	const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) translateX(-50%) translateY(-50%)`;
 
 	// Create a path that represents the border of a rounded rectangle
-	const pathD = `M ${rx || 0},0 L calc(100% - ${rx || 0}),0 Q 100%,0 100%,${ry || 0} L 100%,calc(100% - ${ry || 0}) Q 100%,100% calc(100% - ${rx || 0}),100% L ${rx || 0},100% Q 0,100% 0,calc(100% - ${ry || 0}) L 0,${ry || 0} Q 0,0 ${rx || 0},0 Z`;
+	// Parse percentage values (e.g., "30%" -> 30) for use in viewBox coordinates
+	const parsePercent = (value: string | undefined): number => {
+		if (!value) return 0;
+		const num = parseFloat(value.replace("%", ""));
+		return isNaN(num) ? 0 : num;
+	};
+	
+	const rxValue = parsePercent(rx);
+	const ryValue = parsePercent(ry);
+	
+	// Create path for rounded rectangle (using viewBox="0 0 100 100" for percentage-based calculations)
+	const pathD = `M ${rxValue},0 L ${100 - rxValue},0 Q 100,0 100,${ryValue} L 100,${100 - ryValue} Q 100,100 ${100 - rxValue},100 L ${rxValue},100 Q 0,100 0,${100 - ryValue} L 0,${ryValue} Q 0,0 ${rxValue},0 Z`;
 
 	return (
 		<>
@@ -114,6 +145,7 @@ export const MovingBorder = ({
 				className="absolute h-full w-full"
 				width="100%"
 				height="100%"
+				viewBox="0 0 100 100"
 				{...otherProps}
 			>
 				<path
