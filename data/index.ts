@@ -10,7 +10,7 @@ export const gridItems = [
         id: 1,
         title: "Full Stack Engineering",
         description: "",
-        className: "lg:col-span-3 md:col-span-3 md:row-span-4 lg:min-h-[60vh]",
+        className: "md:col-span-3 md:row-span-4 lg:col-span-3 lg:min-h-[60vh]",
         imgClassName: "w-full h-full",
         titleClassName: "justify-end",
         img: "/background.jpg",
@@ -20,7 +20,7 @@ export const gridItems = [
         id: 2,
         title: "Christoph Jürgens",
         description: "Senior Software Engineer",
-        className: "lg:col-span-2 md:col-span-1 md:row-span-2",
+        className: "md:col-span-3 md:row-span-2 lg:col-span-2",
         imgClassName: "",
         titleClassName: "justify-start",
         img: "",
@@ -30,7 +30,7 @@ export const gridItems = [
         id: 3,
         title: "My tech stack",
         description: "Web and mobile",
-        className: "lg:col-span-2 md:col-span-2 md:row-span-2",
+        className: "md:col-span-3 md:row-span-2 lg:col-span-2",
         imgClassName: "",
         titleClassName: "justify-center",
         img: "",
@@ -40,7 +40,7 @@ export const gridItems = [
         id: 4,
         title: "Web, Mobile and Cloud",
         description: "13+ years of experience in ",
-        className: "lg:col-span-2 md:col-span-1 md:row-span-1",
+        className: "md:col-span-3 md:row-span-1 lg:col-span-2",
         imgClassName: "",
         titleClassName: "justify-start",
         img: "/grid.svg",
@@ -60,7 +60,7 @@ export const gridItems = [
         id: 6,
         title: "Do you want to start a project together?",
         description: "",
-        className: "lg:col-span-2 md:col-span-2 md:row-span-1",
+        className: "lg:col-span-2 md:col-span-3 md:row-span-1",
         imgClassName: "",
         titleClassName: "justify-center md:max-w-full max-w-60 text-center",
         img: "",
@@ -181,7 +181,8 @@ export const projects = [
         des: "High-performance web presence for Kando Martial Arts Knox, optimised for fast loading, strong SEO and local search visibility to boost classes and community engagement.",
         img: "/kando.png",
         iconLists: ["/re.svg", "/astro.svg", "/tail.svg", "/aws.svg", "/gsap.svg"],
-        link: "https://knoxmartialarts.com.au",
+        link: "https://d1a2zyku2pp97h.cloudfront.net/",
+        // link: "https://knoxmartialarts.com.au",
     },
     {
         id: 5,
@@ -353,33 +354,33 @@ export const socialMedia = [
 // Get email from environment variable
 // Supports both NEXT_PUBLIC_EMAIL (for client-side access) and EMAIL (server-side)
 const getEmailFromEnv = (): string => {
-	const email =
-		process.env.NEXT_PUBLIC_EMAIL || process.env.EMAIL || "";
-	if (!email && process.env.NODE_ENV === "production") {
-		console.warn(
-			"Email address not configured. Set NEXT_PUBLIC_EMAIL or EMAIL environment variable.",
-		);
-	}
-	return email;
+    const email =
+        process.env.NEXT_PUBLIC_EMAIL || process.env.EMAIL || "";
+    if (!email && process.env.NODE_ENV === "production") {
+        console.warn(
+            "Email address not configured. Set NEXT_PUBLIC_EMAIL or EMAIL environment variable.",
+        );
+    }
+    return email;
 };
 
 // Convert email to obfuscated parts
 // Format: [reversedDomain, reversedUsername]
 // For "[email removed]": domain="juergens.au" -> "ua.snegreuj", username="contact" -> "tcatnoc"
 const emailToObfuscatedParts = (email: string): [string, string] => {
-	const [username, domain] = email.split("@");
-	if (!username || !domain) {
-		return ["", ""];
-	}
-	return [
-		domain.split("").reverse().join(""),
-		username.split("").reverse().join(""),
-	];
+    const [username, domain] = email.split("@");
+    if (!username || !domain) {
+        return ["", ""];
+    }
+    return [
+        domain.split("").reverse().join(""),
+        username.split("").reverse().join(""),
+    ];
 };
 
 const emailAddress = getEmailFromEnv();
 export const emailAddressParts: [string, string] = emailAddress
-	? emailToObfuscatedParts(emailAddress)
-	: (["", ""] as [string, string]);
+    ? emailToObfuscatedParts(emailAddress)
+    : (["", ""] as [string, string]);
 
 export { emailAddress };

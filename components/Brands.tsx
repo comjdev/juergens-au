@@ -35,7 +35,7 @@ const Brands = () => {
 					speed={30}
 					direction="right"
 					pauseOnHover={true}
-					className="lg:mt-20"
+					className="mt-10 lg:mt-20"
 				>
 					{companies.map((company) => (
 						<div
