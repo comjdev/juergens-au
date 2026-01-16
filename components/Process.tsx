@@ -11,7 +11,7 @@ const Approach = () => {
 			<h1 className="heading">
 				My <span className="text-purple">development</span> process
 			</h1>
-			{/* remove bg-white dark:bg-black */}
+			{/* remove bg-white and use dark by default */}
 			<div className="my-20 flex flex-col lg:flex-row items-center justify-center w-full gap-4">
 				{/* add des prop */}
 				<Card
@@ -43,7 +43,7 @@ const Approach = () => {
 					/>
 					{/* Radial gradient for the cute fade */}
 					{/* remove this one */}
-					{/* <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,white,transparent)] bg-black/50 dark:bg-black/90" /> */}
+				{/* <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,white,transparent)] bg-black/90" /> */}
 				</Card>
 				<Card
 					title="Testing & Launch"
@@ -81,8 +81,8 @@ const Card = ({
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 			// change h-[30rem] to h-[35rem], add rounded-3xl
-			className="border border-black/20 group/canvas-card flex items-center justify-center
-       dark:border-white/20  max-w-sm w-full mx-auto p-4 relative lg:h-140 rounded-3xl "
+			className="border border-white/20 group/canvas-card flex items-center justify-center
+       max-w-sm w-full mx-auto p-4 relative lg:h-140 rounded-3xl "
 			style={{
 				//   add these two
 				//   you can generate the color from here https://cssgradient.io/
@@ -92,10 +92,10 @@ const Card = ({
 			}}
 		>
 			{/* change to h-10 w-10 , add opacity-30  */}
-			<Icon className="absolute h-10 w-10 -top-3 -left-3 dark:text-white text-black opacity-30" />
-			<Icon className="absolute h-10 w-10 -bottom-3 -left-3 dark:text-white text-black opacity-30" />
-			<Icon className="absolute h-10 w-10 -top-3 -right-3 dark:text-white text-black opacity-30" />
-			<Icon className="absolute h-10 w-10 -bottom-3 -right-3 dark:text-white text-black opacity-30" />
+			<Icon className="absolute h-10 w-10 -top-3 -left-3 text-white opacity-30" />
+			<Icon className="absolute h-10 w-10 -bottom-3 -left-3 text-white opacity-30" />
+			<Icon className="absolute h-10 w-10 -top-3 -right-3 text-white opacity-30" />
+			<Icon className="absolute h-10 w-10 -bottom-3 -right-3 text-white opacity-30" />
 
 			<AnimatePresence>
 				{hovered && (
@@ -120,8 +120,8 @@ const Card = ({
 				</div>
 				<h2
 					// change text-3xl, add text-center
-					className="dark:text-white text-center text-3xl opacity-0 group-hover/canvas-card:opacity-100
-         relative z-10 text-black mt-4  font-bold group-hover/canvas-card:text-white 
+					className="text-white text-center text-3xl opacity-0 group-hover/canvas-card:opacity-100
+         relative z-10 mt-4 font-bold group-hover/canvas-card:text-white 
          group-hover/canvas-card:-translate-y-2 transition duration-200"
 				>
 					{title}
@@ -167,7 +167,7 @@ const AceternityIcon = ({ order }: { order: string }) => {
 		//   viewBox="0 0 66 65"
 		//   fill="none"
 		//   xmlns="http://www.w3.org/2000/svg"
-		//   className="h-10 w-10 text-black dark:text-white group-hover/canvas-card:text-white "
+		//   className="h-10 w-10 text-white group-hover/canvas-card:text-white "
 		// >
 		//   <path
 		//     d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
